@@ -1,0 +1,361 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Tokens de color del dashboard (canales RGB para poder usar opacidad en
+ * Tailwind: bg-surface/80). :root es el modo claro y .dark el oscuro.
+ */
+@layer base {
+    :root {
+        --surface: 250 248 255;
+        --surface-bright: 255 255 255;
+        --surface-container-lowest: 255 255 255;
+        --surface-container-low: 255 255 255;
+        --surface-container: 243 242 250;
+        --surface-container-high: 236 235 245;
+        --surface-container-highest: 226 225 236;
+        --on-surface: 26 27 36;
+        --on-surface-variant: 78 67 78;
+        --outline: 127 115 126;
+        --outline-variant: 210 194 207;
+        --primary: 133 69 143;
+        --on-primary: 255 255 255;
+        --primary-container: 255 213 255;
+        --on-primary-container: 53 0 64;
+        --secondary: 107 56 212;
+        --secondary-container: 233 221 255;
+        --on-secondary-container: 35 0 92;
+        --tertiary: 0 120 105;
+        --tertiary-container: 178 245 232;
+        --on-tertiary-container: 0 32 27;
+        --error: 186 26 26;
+        --error-container: 255 218 214;
+        --on-error-container: 65 0 2;
+        --card-ring: 0 0 0 / 0.06;
+        color-scheme: light;
+    }
+
+    .dark {
+        --surface: 17 19 28;
+        --surface-bright: 55 57 67;
+        --surface-container-lowest: 12 14 23;
+        --surface-container-low: 25 27 36;
+        --surface-container: 29 31 41;
+        --surface-container-high: 40 41 51;
+        --surface-container-highest: 50 52 62;
+        --on-surface: 225 225 239;
+        --on-surface-variant: 210 194 207;
+        --outline: 154 141 153;
+        --outline-variant: 78 67 78;
+        --primary: 247 172 255;
+        --on-primary: 81 19 93;
+        --primary-container: 106 44 117;
+        --on-primary-container: 228 154 236;
+        --secondary: 208 188 255;
+        --secondary-container: 87 27 193;
+        --on-secondary-container: 196 171 255;
+        --tertiary: 0 223 196;
+        --tertiary-container: 0 80 69;
+        --on-tertiary-container: 0 203 178;
+        --error: 255 180 171;
+        --error-container: 147 0 10;
+        --on-error-container: 255 218 214;
+        --card-ring: 255 255 255 / 0.04;
+        color-scheme: dark;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        line-height: 1;
+        user-select: none;
+    }
+    .icon-fill {
+        font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+}
+
+/* Variable animable para el anillo de SLA. */
+@property --p {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+}
+
+@layer components {
+    /* ---------- Formularios ---------- */
+    .form-control {
+        @apply block w-full rounded-lg border border-outline-variant/60 bg-surface-container-lowest text-on-surface text-sm shadow-sm placeholder:text-outline transition focus:border-tertiary focus:ring-1 focus:ring-tertiary disabled:opacity-60;
+    }
+    select.form-control {
+        @apply pr-9;
+    }
+    .form-label {
+        @apply block text-sm font-medium text-on-surface-variant;
+    }
+    .form-hint {
+        @apply mt-1 text-xs text-outline;
+    }
+    .form-check {
+        @apply rounded border-outline-variant bg-surface-container-lowest text-primary shadow-sm focus:ring-primary focus:ring-offset-0;
+    }
+
+    /* ---------- Botones ---------- */
+    .btn {
+        @apply inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-tertiary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:opacity-50 disabled:pointer-events-none;
+    }
+    .btn-primary {
+        @apply btn bg-primary text-on-primary shadow-md shadow-primary/20 hover:brightness-110;
+    }
+    .btn-tonal {
+        @apply btn bg-primary-container text-on-primary-container hover:brightness-105;
+    }
+    .btn-secondary {
+        @apply btn bg-surface-container-high text-on-surface hover:bg-surface-bright;
+    }
+    .btn-danger {
+        @apply btn bg-error text-white dark:text-on-error-container dark:bg-error-container hover:brightness-110;
+    }
+    .btn-ghost {
+        @apply btn text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface;
+    }
+    .btn-sm {
+        @apply px-2.5 py-1 text-xs;
+    }
+
+    /* ---------- Tablas ---------- */
+    .dash-table {
+        @apply w-full text-sm text-left;
+    }
+    .dash-table thead {
+        @apply bg-surface-container text-outline text-[11px] font-semibold uppercase tracking-wider;
+    }
+    .dash-table th {
+        @apply px-4 py-3 font-semibold;
+    }
+    .dash-table td {
+        @apply px-4 py-3 text-on-surface;
+    }
+    .dash-table tbody tr {
+        @apply border-t border-outline-variant/20 transition-colors hover:bg-surface-container;
+    }
+
+    /* ---------- Tarjetas ---------- */
+    .dash-card {
+        @apply relative rounded-xl bg-surface-container-low shadow-md transition-colors duration-300;
+        box-shadow: 0 0 0 1px rgb(var(--card-ring)), 0 4px 16px -8px rgb(0 0 0 / 0.12);
+    }
+
+    /* ---------- Barra horizontal 3D (tubo) ---------- */
+    .bar3d {
+        position: relative;
+        height: 14px;
+        border-radius: 9999px;
+        background: rgb(var(--surface-container-highest));
+        box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.18), 0 1px 0 rgb(255 255 255 / 0.06);
+        overflow: hidden;
+    }
+    .bar3d__fill {
+        position: relative;
+        height: 100%;
+        min-width: 14px;
+        border-radius: inherit;
+        background: linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--c) 45%, white) 0%,
+            var(--c) 42%,
+            color-mix(in srgb, var(--c) 65%, black) 100%
+        );
+        box-shadow: 0 4px 12px -2px color-mix(in srgb, var(--c) 65%, transparent);
+        animation: bar3d-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: var(--d, 0ms);
+        overflow: hidden;
+    }
+    .bar3d__fill[data-empty] {
+        min-width: 0;
+    }
+    /* Reflejo superior para dar volumen */
+    .bar3d__fill::before {
+        content: '';
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        top: 2px;
+        height: 35%;
+        border-radius: 9999px;
+        background: linear-gradient(180deg, rgb(255 255 255 / 0.7), rgb(255 255 255 / 0));
+    }
+    /* Franjas en movimiento */
+    .bar3d__fill::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: repeating-linear-gradient(-45deg, rgb(255 255 255 / 0.18) 0 8px, transparent 8px 16px);
+        background-size: 22.6px 100%;
+        animation: bar3d-stripes 1s linear infinite;
+    }
+    .bar3d--thin {
+        height: 6px;
+    }
+    .bar3d--thin .bar3d__fill {
+        min-width: 6px;
+    }
+    .bar3d--thin .bar3d__fill::before,
+    .bar3d--thin .bar3d__fill::after {
+        display: none;
+    }
+
+    /* ---------- Columnas isométricas 3D ---------- */
+    .col3d-chart {
+        @apply flex items-end justify-around gap-3 pt-6;
+        height: 240px;
+    }
+    .col3d {
+        @apply flex flex-col items-center justify-end h-full flex-1 min-w-0;
+    }
+    .col3d__track {
+        @apply relative flex items-end w-full justify-center h-full;
+    }
+    .col3d__bar {
+        --depth: 12px;
+        position: relative;
+        width: clamp(20px, 55%, 44px);
+        margin-right: var(--depth);
+        height: var(--h);
+        min-height: 4px;
+        background: linear-gradient(90deg, color-mix(in srgb, var(--c) 80%, white), var(--c));
+        border-radius: 3px 0 0 0;
+        animation: col3d-grow 1.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: var(--d, 0ms);
+        transition: filter 0.2s;
+    }
+    .col3d__bar:hover {
+        filter: brightness(1.1) saturate(1.1);
+    }
+    .col3d__bar::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 100%;
+        width: 100%;
+        height: var(--depth);
+        background: color-mix(in srgb, var(--c) 45%, white);
+        transform-origin: bottom left;
+        transform: skewX(-45deg);
+    }
+    .col3d__bar::after {
+        content: '';
+        position: absolute;
+        left: 100%;
+        top: 0;
+        width: var(--depth);
+        height: 100%;
+        background: color-mix(in srgb, var(--c) 65%, black);
+        transform-origin: top left;
+        transform: skewY(-45deg);
+    }
+    .col3d__value {
+        @apply absolute text-xs font-bold text-on-surface whitespace-nowrap font-code;
+        bottom: calc(100% + var(--depth) + 4px);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .col3d__floor {
+        height: 6px;
+        border-radius: 9999px;
+        background: radial-gradient(ellipse at center, rgb(0 0 0 / 0.25), transparent 70%);
+    }
+
+    /* ---------- Anillo de progreso ---------- */
+    .ring3d {
+        --p-final: 0;
+        --p: var(--p-final);
+        position: relative;
+        width: 148px;
+        height: 148px;
+        border-radius: 9999px;
+        background: conic-gradient(
+            from -90deg,
+            color-mix(in srgb, var(--c) 60%, white),
+            var(--c) calc(var(--p) * 1%),
+            rgb(var(--surface-container-highest)) 0
+        );
+        box-shadow: 0 10px 24px -8px color-mix(in srgb, var(--c) 55%, transparent),
+            inset 0 -4px 8px rgb(0 0 0 / 0.15);
+        animation: ring3d-fill 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .ring3d::before {
+        content: '';
+        position: absolute;
+        inset: 14px;
+        border-radius: inherit;
+        background: rgb(var(--surface-container-low));
+        box-shadow: inset 0 3px 6px rgb(0 0 0 / 0.12);
+    }
+    .ring3d__label {
+        @apply absolute inset-0 flex flex-col items-center justify-center;
+    }
+
+    /* ---------- Dona SVG animada ---------- */
+    .donut-seg {
+        stroke-dasharray: 0 251.33;
+        animation: donut-draw 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: var(--d, 0ms);
+    }
+
+    /* ---------- Indicador en vivo ---------- */
+    .pulse-dot {
+        @apply relative inline-flex w-2 h-2 rounded-full shrink-0;
+        background: var(--c);
+    }
+    .pulse-dot::before {
+        content: '';
+        @apply absolute inset-0 rounded-full;
+        background: var(--c);
+        animation: pulse-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        scrollbar-width: none;
+    }
+}
+
+@keyframes bar3d-grow {
+    from { width: 0; }
+}
+@keyframes bar3d-stripes {
+    to { background-position: 22.6px 0; }
+}
+@keyframes col3d-grow {
+    from { height: 0; }
+}
+@keyframes ring3d-fill {
+    from { --p: 0; }
+}
+@keyframes donut-draw {
+    to { stroke-dasharray: var(--len) 251.33; }
+}
+@keyframes pulse-ping {
+    75%, 100% { transform: scale(2.4); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bar3d__fill,
+    .bar3d__fill::after,
+    .col3d__bar,
+    .ring3d,
+    .pulse-dot::before {
+        animation: none !important;
+    }
+    .donut-seg {
+        animation: none;
+        stroke-dasharray: var(--len) 251.33;
+    }
+}
