@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 use SocialiteProviders\Manager\SocialiteWasCalled;
-use SocialiteProviders\Microsoft\MicrosoftExtendSocialite;
+use SocialiteProviders\Microsoft\Provider as MicrosoftProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -71,9 +71,8 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(TicketReopened::class, SendTicketReopenedNotification::class);
         Event::listen(TicketSlaBreached::class, SendTicketSlaNotification::class);
 
-        // FASE 5: login con Microsoft Entra ID vía Socialite.
         Event::listen(function (SocialiteWasCalled $event) {
-            $event->extendSocialite('microsoft', MicrosoftExtendSocialite::class);
-        });
+    $event->extendSocialite('microsoft', MicrosoftProvider::class);
+});
     }
 }

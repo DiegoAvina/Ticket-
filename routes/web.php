@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\MicrosoftLoginController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -47,6 +48,16 @@ Route::middleware('auth')->group(function () {
         Route::resource('categories', CategoryController::class)->except(['show']);
         Route::resource('priorities', PriorityController::class)->except(['show']);
     });
+
+    Route::get('/auth/microsoft/redirect', [
+        MicrosoftLoginController::class,
+        'redirect'
+    ])->name('microsoft.redirect');
+
+    Route::get('/auth/microsoft/callback', [
+        MicrosoftLoginController::class,
+        'callback'
+    ])->name('microsoft.callback');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
